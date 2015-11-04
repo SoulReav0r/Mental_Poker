@@ -36,7 +36,7 @@ public class RSA_Testbench {
         BigInteger  pExp = d.mod(pMinusOne);
         // d mod (q-1)
         BigInteger  qExp = d.mod(qMinusOne);
-        // chinesischer Restansatz zur Bestimmung der Teilerfremde
+ 
         BigInteger  crtCoef = q.modInverse(p);
 
         byte[]                data = plainText.getBytes();
