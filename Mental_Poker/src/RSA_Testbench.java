@@ -70,7 +70,7 @@ public class RSA_Testbench {
         // Testing
         
         if (Arrays.equals(data, decrData)) {
-            System.out.println("LÃ¤uft!\n"+"plain: "+new String(decrData)+"\n");
+            System.out.println("Läuft!\n"+"plain: "+new String(decrData)+"\n");
         } else {
         	System.err.println("ZONG"+"encrypt: "+new String(encrData)+"\n"+"plain: "+new String(decrData));
         }
