@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.*;
 import java.security.*;
 import java.util.*;
-import javax.net.*;
 import javax.net.ssl.*;
 
 public class TLS_Server implements Runnable
