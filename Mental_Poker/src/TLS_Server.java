@@ -33,11 +33,6 @@ public class TLS_Server implements Runnable
   private SSLContext sslContext;
   
   /**
-   * A list of visible postings
-   */
-  private Set postings = new HashSet();
-
-  /**
    * Passphrase for accessing our authentication keystore
    */
   static private final String passphrase = "serverpw";

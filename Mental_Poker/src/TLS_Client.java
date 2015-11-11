@@ -7,9 +7,8 @@ import java.security.*;
 import java.util.*;
 import javax.net.*;
 import javax.net.ssl.*;
-import javax.swing.*;
 
-public class TLS_Client extends JFrame implements Runnable
+public class TLS_Client implements Runnable
 {
   /**
    * Connection to the client
@@ -37,16 +36,11 @@ public class TLS_Client extends JFrame implements Runnable
   private SSLContext sslContext;
   
   /**
-   * A list of visible postings
+   * JSON Object for sending
    */
-  private String Message = "Lorem Ipsum";
+  private JSONObject Message = new JSONObject("{Message : Test}");
 
-  /**
-   * The font used for all postings
-   */
-  private Font font = new Font( "TimesRoman", Font.PLAIN, 18 );
-
-  /**
+    /**
    * Passphrase for accessing our authentication keystore
    */
   static private final String passphrase = "clientpw";
@@ -110,7 +104,7 @@ public class TLS_Client extends JFrame implements Runnable
   public void run() {
     try {
       while (true) {      
-        	dout.writeUTF(Message); // TODO Message is send continuously --> better choose non Blocking data structures like Queue 
+        	dout.writeUTF(Message.getString("Message")); // TODO Message is send continuously --> better choose non Blocking data structures like Queue 
     	  ;      }
     } catch( IOException ie ) {
       ie.printStackTrace();
