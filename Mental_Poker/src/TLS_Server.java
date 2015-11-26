@@ -6,6 +6,8 @@ import javax.net.ssl.*;
 
 public class TLS_Server implements Runnable
 {
+	
+	String X509path = "";
   /**
    * The port we will listen on
    */
@@ -34,7 +36,7 @@ public class TLS_Server implements Runnable
   /**
    * Passphrase for accessing our authentication keystore
    */
-  static private final String passphrase = "serverpw";
+  static private String passphrase = "";
 
   /**
    * A source of secure random numbers
@@ -45,21 +47,25 @@ public class TLS_Server implements Runnable
    * Create a Server that listens on the given port.
    * Start the background listening thread
    */
-  public TLS_Server( int port ) {
+  public TLS_Server( int port, String X509path, String passphrase ) {
     this.port = port;
-
+    this.passphrase = passphrase;
+    this.X509path = X509path;
+    secureRandom = new SecureRandom();
+    secureRandom.nextInt();
+    	
     new Thread( this ).start();
   }
 
   private void setupClientKeyStore() throws GeneralSecurityException, IOException {
     clientKeyStore = KeyStore.getInstance( "JKS" );
-    clientKeyStore.load( new FileInputStream( "D:/JavaWorkspace/Mental_Poker/Mental_Poker/src/client.public" ),
+    clientKeyStore.load( new FileInputStream( X509path+"/client.public" ),
                        "public".toCharArray() );
   }
 
   private void setupServerKeystore() throws GeneralSecurityException, IOException {
     serverKeyStore = KeyStore.getInstance( "JKS" );
-    serverKeyStore.load( new FileInputStream( "D:/JavaWorkspace/Mental_Poker/Mental_Poker/src/server.private" ),
+    serverKeyStore.load( new FileInputStream( X509path+"/server.private" ),
                         passphrase.toCharArray() );
   }
 
@@ -126,18 +132,6 @@ public class TLS_Server implements Runnable
    * be provided on the command line
    */
   static public void main( String args[] ) {
-    if (args.length != 1) {
-      System.err.println( "Usage: java Server [port number]" );
-      System.exit( 1 );
-    }
 
-    int port = Integer.parseInt( args[0] );
-
-    System.out.println( "Wait while secure random numbers are initialized...." );
-    secureRandom = new SecureRandom();
-    secureRandom.nextInt();
-    System.out.println( "Done." );
-
-    new TLS_Server( port );
   }
 }

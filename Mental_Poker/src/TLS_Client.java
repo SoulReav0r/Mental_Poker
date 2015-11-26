@@ -4,6 +4,9 @@ import javax.net.ssl.*;
 
 public class TLS_Client implements Runnable
 {
+  
+   private String X509path = "";
+	
   /**
    * Connection to the client
    */
@@ -37,27 +40,31 @@ public class TLS_Client implements Runnable
     /**
    * Passphrase for accessing our authentication keystore
    */
-  static private final String passphrase = "clientpw";
+  static private String passphrase = "clientpw";
 
   /**
    * A source of secure random numbers
    */
   static private SecureRandom secureRandom;
 
-  public TLS_Client( String host, int port ) {
-    connect( host, port );
+  public TLS_Client( String host, int port, String X509path, String passphrase ) {
+	secureRandom = new SecureRandom();
+	secureRandom.nextInt();
+	this.X509path = X509path;
+    this.passphrase = passphrase;
+	connect( host, port );
     new Thread( this ).start();
   }
 
   private void setupServerKeystore() throws GeneralSecurityException, IOException {
     serverKeyStore = KeyStore.getInstance( "JKS" );
-    serverKeyStore.load( new FileInputStream( "D:/JavaWorkspace/Mental_Poker/Mental_Poker/src/server.public" ), 
+    serverKeyStore.load( new FileInputStream( X509path+"/server.public" ), 
                         "public".toCharArray() );
   }
 
   private void setupClientKeyStore() throws GeneralSecurityException, IOException {
     clientKeyStore = KeyStore.getInstance( "JKS" );
-    clientKeyStore.load( new FileInputStream( "D:/JavaWorkspace/Mental_Poker/Mental_Poker/src/client.private" ),
+    clientKeyStore.load( new FileInputStream( X509path+"/client.private" ),
                        passphrase.toCharArray() );
   }
 
@@ -98,27 +105,18 @@ public class TLS_Client implements Runnable
   public void run() {
     try {
       while (true) {      
-        	dout.writeUTF(Message.getString("Message")); // TODO Message is send continuously --> better choose non Blocking data structures like Queue 
-    	  ;      }
+    	//TODO insert protocol
+    	  
+        	dout.writeUTF(Message.getString("Message")); // TODO Message is send continuously --> better choose non Blocking data structures like Queue
+        	System.out.println(din.readUTF()); // print message from server
+        	;      }
     } catch( IOException ie ) {
       ie.printStackTrace();
     }
   }
   
   static public void main( String args[] ) {
-    if (args.length != 2) {
-      System.err.println( "Usage: java Client [hostname] [port number]" );
-      System.exit( 1 );
-    }
 
-    String host = args[0];
-    int port = Integer.parseInt( args[1] );
-
-    System.out.println( "Wait while secure random numbers are initialized...." );
-    secureRandom = new SecureRandom();
-    secureRandom.nextInt();
-    System.out.println( "Done." );
-
-    new TLS_Client( host, port );
   }
+
 }

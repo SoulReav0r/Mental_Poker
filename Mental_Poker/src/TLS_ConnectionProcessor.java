@@ -24,8 +24,6 @@ public class TLS_ConnectionProcessor implements Runnable
    * Connection to the client
    */
   private DataOutputStream dout;
-  
-  private byte [] Message = null;
 
   /**
    * Create a new ConnectionProcessor
@@ -46,7 +44,10 @@ public class TLS_ConnectionProcessor implements Runnable
       dout = new DataOutputStream( out );
 
       while (true) { 
-        	 System.out.println(din.readUTF()); // TODO Message is read continuously --> better choose non Blocking data structures like Queue 
+       //TODO insert protocol
+      
+      //System.out.println(din.readUTF()); // testoutput 
+      dout.writeUTF(din.readUTF()); // direct pipe from server to client 
       }
 
     } catch( IOException ie ) {
